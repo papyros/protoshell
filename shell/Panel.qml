@@ -2,11 +2,13 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.3
 import Material 0.3
 
-Item {
+Rectangle {
     id: panel
 
     height: 36
     width: parent.width
+
+    color: hasFullscreenWindow ? "black" : "transparent"
 
     property int iconSize: 18
 

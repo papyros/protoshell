@@ -39,14 +39,16 @@ GreenIsland.WaylandCompositor {
 
     property int idleDelay
 
-    readonly property alias outputs: __private.outputs
-    readonly property alias primaryScreen: screenManager.primaryScreen
+    property alias outputs: __private.outputs
+    property alias primaryScreen: screenManager.primaryScreen
 
     property int idleInhibit: 0
     property bool isIdle: false
 
-    readonly property alias windowsModel: windowsModel
-    readonly property alias applicationManager: applicationManager
+    property alias windowsModel: windowsModel
+    property alias applicationManager: applicationManager
+    property alias windowManager: windowManager
+
 
     function wake() {
         var i;
@@ -197,6 +199,15 @@ GreenIsland.WaylandCompositor {
     // Windows
     ListModel {
         id: windowsModel
+
+        function removeWindow(window) {
+            for (var i = 0; i < count; i++) {
+                if (get(i).window == window) {
+                    remove(i)
+                    return;
+                }
+            }
+        }
     }
 
     // Window manager
@@ -216,7 +227,9 @@ GreenIsland.WaylandCompositor {
     Component {
         id: chromeComponent
 
-        GreenIsland.WindowChrome {}
+        GreenIsland.WindowChrome {
+            onSurfaceDestroyed: windowsModel.removeWindow(window)
+        }
     }
 
     Component {

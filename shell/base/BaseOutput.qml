@@ -57,7 +57,11 @@ GreenIsland.ExtendedOutput {
 
     window: OutputWindow {
         id: outputWindow
+
+        output: output
     }
+
+    onGeometryChanged: desktop.updateGeometry()
 
     /*
      * Methods

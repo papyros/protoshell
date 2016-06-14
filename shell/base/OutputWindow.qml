@@ -13,6 +13,8 @@ Window {
     property alias idleDimmerComponent: idleLoader.sourceComponent
     property alias desktopComponent: desktopLoader.sourceComponent
 
+    property var output
+
     minimumWidth: 1024
     minimumHeight: 768
     maximumWidth: nativeScreen.width
@@ -68,6 +70,8 @@ Window {
         Loader {
             id: desktopLoader
             anchors.fill: parent
+
+            readonly property var output: window.output
         }
 
         GreenIsland.WaylandCursorItem {
