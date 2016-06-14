@@ -5,6 +5,8 @@ import GreenIsland 1.0 as GreenIsland
 Window {
     id: window
 
+    property int minKeyboardWidth: 768
+
     property alias desktop: desktopLoader.item
     property alias idleDimmer: idleLoader.item
 
@@ -31,7 +33,7 @@ Window {
         x: (parent.width - width) / 2
         y: parent.height - height
         // TODO: No Fluid UI
-        width: Math.max(parent.width / 2, FluidUi.Units.dp(768))
+        width: Math.max(parent.width / 2, minKeyboardWidth)
 
         z: 999
     }
