@@ -35,7 +35,8 @@ class Application : public QObject
 
     Q_PROPERTY(QString appId READ appId CONSTANT)
     Q_PROPERTY(DesktopFile *desktopFile READ desktopFile CONSTANT)
-    //Q_PROPERTY(QList<ApplicationAction *> actions READ actions CONSTANT)
+    Q_PROPERTY(bool valid READ isValid CONSTANT)
+    // Q_PROPERTY(QList<ApplicationAction *> actions READ actions CONSTANT)
 
     Q_PROPERTY(State state READ state NOTIFY stateChanged)
     Q_PROPERTY(bool running READ isRunning NOTIFY stateChanged)
@@ -47,7 +48,8 @@ class Application : public QObject
     friend LauncherModel;
 
 public:
-    enum State {
+    enum State
+    {
         //! The application is not running
         NotRunning,
         //! The application was launched and it's starting up.
@@ -66,6 +68,8 @@ public:
 
     Application(const QString &appId, LauncherModel *LauncherModel);
     Application(const QString &appId, bool pinned, LauncherModel *LauncherModel);
+
+    bool isValid() const { return m_desktopFile != nullptr && m_desktopFile->isValid(); }
 
     /*!
      * \brief Application state.
@@ -97,21 +101,24 @@ public:
     bool isFocused() const { return m_focused; }
 
     bool isRunning() const { return m_state == Application::Running; }
+    bool isStarting() const { return m_state == Application::Starting; }
 
     /*!
      * \brief Actions.
      *
      * Holds the list of actions for the quicklist.
      */
-    //QList<ApplicationAction *> actions() const { return m_actions; }
+    // QList<ApplicationAction *> actions() const { return m_actions; }
 
     bool isPinned() const { return m_pinned; }
 
 public slots:
     void setPinned(bool pinned);
 
-    Q_INVOKABLE bool launch(const QStringList& urls);
+    Q_INVOKABLE bool launch(const QStringList &urls);
     Q_INVOKABLE bool quit();
+
+    Q_INVOKABLE bool launch() { return launch(QStringList()); }
 
 protected slots:
     void setState(State state);
@@ -133,7 +140,7 @@ private:
     bool m_focused;
     bool m_pinned;
     State m_state;
-    //QList<ApplicationAction *> m_actions;
+    // QList<ApplicationAction *> m_actions;
 };
 
 #endif // APPLICATION_H

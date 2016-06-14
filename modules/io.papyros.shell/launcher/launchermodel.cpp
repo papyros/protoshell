@@ -20,14 +20,14 @@
 
 #include <QtGui/QIcon>
 #include <QDebug>
+#include <QTimer>
 
 #include <KConfigCore/KConfigGroup>
 
 #include "launchermodel.h"
 #include "application.h"
 
-LauncherModel::LauncherModel(QObject *parent)
-    : QAbstractListModel(parent)
+LauncherModel::LauncherModel(QObject *parent) : QAbstractListModel(parent)
 {
     m_config = KSharedConfig::openConfig("papyros-shell", KConfig::NoGlobals);
 }
@@ -44,17 +44,19 @@ void LauncherModel::setIncludePinnedApplications(bool includePinnedApps)
     if (m_includePinnedApps == includePinnedApps)
         return;
 
+    m_includePinnedApps = includePinnedApps;
+
     if (m_list.count() > 0)
         return;
 
     if (includePinnedApps) {
         // Add pinned launchers
-        const QStringList pinnedLaunchers = m_config->group("appshelf")
-                .readEntry("pinnedApps", defaultPinnedApps());
+        const QStringList pinnedLaunchers =
+                m_config->group("appshelf").readEntry("pinnedApps", defaultPinnedApps());
         beginInsertRows(QModelIndex(), 0, m_list.size());
 
         for (QString appId : pinnedLaunchers) {
-            m_list.append(new Application(appId, true, this));
+            addApplication(appId, true);
         }
 
         endInsertRows();
@@ -63,10 +65,7 @@ void LauncherModel::setIncludePinnedApplications(bool includePinnedApps)
     emit includePinnedApplicationsChanged();
 }
 
-bool LauncherModel::includePinnedApplications() const
-{
-    return m_includePinnedApps;
-}
+bool LauncherModel::includePinnedApplications() const { return m_includePinnedApps; }
 
 void LauncherModel::setApplicationManager(ApplicationManager *applicationManager)
 {
@@ -74,14 +73,14 @@ void LauncherModel::setApplicationManager(ApplicationManager *applicationManager
         return;
 
     if (m_applicationManager != nullptr) {
-        disconnect(m_applicationManager, &ApplicationManager::applicationAdded,
-                   this, &LauncherModel::handleApplicationAdded);
-        disconnect(m_applicationManager, &ApplicationManager::applicationRemoved,
-                   this, &LauncherModel::handleApplicationRemoved);
-        disconnect(m_applicationManager, &ApplicationManager::applicationFocused,
-                   this, &LauncherModel::handleApplicationFocused);
-        disconnect(m_applicationManager, &ApplicationManager::applicationUnfocused,
-                   this, &LauncherModel::handleApplicationUnfocused);
+        disconnect(m_applicationManager, &ApplicationManager::applicationAdded, this,
+                   &LauncherModel::handleApplicationAdded);
+        disconnect(m_applicationManager, &ApplicationManager::applicationRemoved, this,
+                   &LauncherModel::handleApplicationRemoved);
+        disconnect(m_applicationManager, &ApplicationManager::applicationFocused, this,
+                   &LauncherModel::handleApplicationFocused);
+        disconnect(m_applicationManager, &ApplicationManager::applicationUnfocused, this,
+                   &LauncherModel::handleApplicationUnfocused);
     }
 
     m_applicationManager = applicationManager;
@@ -89,21 +88,18 @@ void LauncherModel::setApplicationManager(ApplicationManager *applicationManager
     emit applicationManagerChanged();
 
     if (applicationManager != nullptr) {
-        connect(applicationManager, &ApplicationManager::applicationAdded,
-                this, &LauncherModel::handleApplicationAdded);
-        connect(applicationManager, &ApplicationManager::applicationRemoved,
-                this, &LauncherModel::handleApplicationRemoved);
-        connect(applicationManager, &ApplicationManager::applicationFocused,
-                this, &LauncherModel::handleApplicationFocused);
-        connect(applicationManager, &ApplicationManager::applicationUnfocused,
-                this, &LauncherModel::handleApplicationUnfocused);
+        connect(applicationManager, &ApplicationManager::applicationAdded, this,
+                &LauncherModel::handleApplicationAdded);
+        connect(applicationManager, &ApplicationManager::applicationRemoved, this,
+                &LauncherModel::handleApplicationRemoved);
+        connect(applicationManager, &ApplicationManager::applicationFocused, this,
+                &LauncherModel::handleApplicationFocused);
+        connect(applicationManager, &ApplicationManager::applicationUnfocused, this,
+                &LauncherModel::handleApplicationUnfocused);
     }
 }
 
-ApplicationManager *LauncherModel::applicationManager() const
-{
-    return m_applicationManager;
-}
+ApplicationManager *LauncherModel::applicationManager() const { return m_applicationManager; }
 
 void LauncherModel::handleApplicationAdded(const QString &appId, pid_t pid)
 {
@@ -121,10 +117,8 @@ void LauncherModel::handleApplicationAdded(const QString &appId, pid_t pid)
 
     // Otherwise create one
     beginInsertRows(QModelIndex(), m_list.size(), m_list.size());
-    Application *app = new Application(appId, this);
+    Application *app = addApplication(appId, false);
     app->setState(Application::Running);
-    app->m_pids.insert(pid);
-    m_list.append(app);
     endInsertRows();
 }
 
@@ -187,9 +181,47 @@ void LauncherModel::handleApplicationUnfocused(const QString &appId)
     }
 }
 
-QStringList LauncherModel::defaultPinnedApps() {
-    QStringList defaultApps;
-    defaultApps << "org.gnome.Dictionary";
+Application *LauncherModel::addApplication(const QString &appId, bool pinned)
+{
+    auto app = new Application(appId, pinned, this);
+
+    if (pinned && !app->isValid()) {
+        pinLauncher(appId, false);
+        return nullptr;
+    }
+
+    QObject::connect(app, &Application::launched, [=]() {
+        QModelIndex modelIndex = index(indexFromAppId(appId));
+        emit dataChanged(modelIndex, modelIndex);
+
+        QTimer::singleShot(5000, [=]() {
+            if (app->isStarting()) {
+                qDebug() << "Application failed to start!" << appId;
+                auto i = indexFromAppId(appId);
+                if (app->isPinned()) {
+                    QModelIndex modelIndex = index(i);
+                    app->setState(Application::NotRunning);
+                    emit dataChanged(modelIndex, modelIndex);
+                } else {
+                    beginRemoveRows(QModelIndex(), i, i);
+                    m_list.takeAt(i)->deleteLater();
+                    endRemoveRows();
+                }
+            } else {
+                qDebug() << "Application is now running" << appId;
+            }
+        });
+    });
+
+    m_list.append(app);
+
+    return app;
+}
+
+QStringList LauncherModel::defaultPinnedApps()
+{
+    QStringList defaultApps = {"papyros-files", "org.kde.kate", "papyros-terminal",
+                               "papyros-settings"};
 
     return defaultApps;
 }
@@ -202,6 +234,7 @@ QHash<int, QByteArray> LauncherModel::roleNames() const
     roles.insert(ActionsRole, "actions");
     roles.insert(StateRole, "state");
     roles.insert(RunningRole, "running");
+    roles.insert(StartingRole, "starting");
     roles.insert(FocusedRole, "focused");
     roles.insert(PinnedRole, "pinned");
     return roles;
@@ -233,6 +266,8 @@ QVariant LauncherModel::data(const QModelIndex &index, int role) const
         return item->isPinned();
     case RunningRole:
         return item->isRunning();
+    case StartingRole:
+        return item->isStarting();
     case FocusedRole:
         return item->isFocused();
     default:
@@ -253,7 +288,7 @@ int LauncherModel::indexFromAppId(const QString &appId) const
 {
     for (int i = 0; i < m_list.size(); i++) {
         if (m_list.at(i)->appId() == appId)
-            return 0;
+            return i;
     }
 
     return -1;
@@ -340,49 +375,54 @@ void LauncherModel::pinLauncher(const QString &appId, bool pinned)
     KConfigGroup group = m_config->group("appshelf");
 
     // Currently pinned launchers
-    QStringList pinnedLaunchers = m_config->group("appshelf")
-            .readEntry("pinnedApps", defaultPinnedApps());
+    QStringList pinnedLaunchers =
+            m_config->group("appshelf").readEntry("pinnedApps", defaultPinnedApps());
 
     // Add or remove from the pinned launchers
     if (pinned)
-         pinnedLaunchers.append(appId);
+        pinnedLaunchers.append(appId);
     else
-         pinnedLaunchers.removeOne(appId);
+        pinnedLaunchers.removeOne(appId);
 
     group.writeEntry("pinnedApps", pinnedLaunchers);
     group.sync();
 }
 
-bool LauncherModel::moveRows(int sourceRow, int count, int destinationChild) {
+bool LauncherModel::moveRows(int sourceRow, int count, int destinationChild)
+{
     return moveRows(QModelIndex(), sourceRow, count, QModelIndex(), destinationChild);
 }
 
-bool LauncherModel::moveRows(const QModelIndex & sourceParent, int sourceRow, int count, const QModelIndex & destinationParent, int destinationChild) {
+bool LauncherModel::moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
+                             const QModelIndex &destinationParent, int destinationChild)
+{
     QList<Application *> tmp;
 
     Q_UNUSED(sourceParent);
     Q_UNUSED(destinationParent);
 
     if (sourceRow + count - 1 < destinationChild) {
-        beginMoveRows(QModelIndex(), sourceRow, sourceRow + count - 1, QModelIndex(), destinationChild + 1);
+        beginMoveRows(QModelIndex(), sourceRow, sourceRow + count - 1, QModelIndex(),
+                      destinationChild + 1);
         for (int i = sourceRow; i < sourceRow + count; i++) {
             Q_ASSERT(m_list[i]);
             tmp << m_list.takeAt(i);
         }
         for (int i = 0; i < count; i++) {
             Q_ASSERT(tmp[i]);
-            m_list.insert(destinationChild - count + 2 + i,tmp[i]);
+            m_list.insert(destinationChild - count + 2 + i, tmp[i]);
         }
         endMoveRows();
     } else if (sourceRow > destinationChild) {
-        beginMoveRows(QModelIndex(), sourceRow, sourceRow + count - 1, QModelIndex(), destinationChild);
+        beginMoveRows(QModelIndex(), sourceRow, sourceRow + count - 1, QModelIndex(),
+                      destinationChild);
         for (int i = sourceRow; i < sourceRow + count; i++) {
             Q_ASSERT(m_list[i]);
             tmp << m_list.takeAt(i);
         }
         for (int i = 0; i < count; i++) {
             Q_ASSERT(tmp[i]);
-            m_list.insert(destinationChild + i,tmp[i]);
+            m_list.insert(destinationChild + i, tmp[i]);
         }
         endMoveRows();
     }

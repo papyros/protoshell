@@ -23,6 +23,7 @@
 #include "desktopfiles.h"
 
 #include <QFile>
+#include <QDir>
 #include <QFileInfo>
 #include <QTextStream>
 #include <QLocale>
@@ -54,12 +55,37 @@ QString DesktopFile::getEnvVar(int pid)
     return rx.cap(1);
 }
 
-void DesktopFile::setAppId(QString appId) { setPath(appId + ".desktop"); }
+void DesktopFile::setAppId(QString appId)
+{
+    appId = canonicalAppId(appId);
+    setPath(appId + ".desktop");
+}
+
+QString DesktopFile::canonicalAppId(QString appId)
+{
+    bool notFound = pathFromAppId(appId).isEmpty();
+
+    if (notFound && appId.startsWith("papyros-")) {
+        QString name = appId.mid(8);
+
+        if (name == "appcenter") {
+            name = "AppCenter";
+        } else {
+            name = name.left(1).toUpper() + name.mid(1);
+        }
+
+        appId = "io.papyros." + name;
+
+        qDebug() << appId;
+    }
+
+    return appId;
+}
 
 QString DesktopFile::pathFromAppId(QString appId)
 {
     QStringList paths;
-    paths << "~/.local/share/applications"
+    paths << QDir::homePath() + "/.local/share/applications"
           << "/usr/local/share/applications"
           << "/usr/share/applications";
 

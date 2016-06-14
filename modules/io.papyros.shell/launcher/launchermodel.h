@@ -35,18 +35,20 @@ class Application;
 class LauncherModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(ApplicationManager *applicationManager READ applicationManager WRITE setApplicationManager
-               NOTIFY applicationManagerChanged)
-    Q_PROPERTY(bool includePinnedApplications READ includePinnedApplications WRITE setIncludePinnedApplications
-               NOTIFY includePinnedApplicationsChanged)
+    Q_PROPERTY(ApplicationManager *applicationManager READ applicationManager WRITE
+                       setApplicationManager NOTIFY applicationManagerChanged)
+    Q_PROPERTY(bool includePinnedApplications READ includePinnedApplications WRITE
+                       setIncludePinnedApplications NOTIFY includePinnedApplicationsChanged)
 
 public:
-    enum Roles {
+    enum Roles
+    {
         AppIdRole = Qt::UserRole + 1,
         DesktopFileRole,
         ActionsRole,
         StateRole,
         RunningRole,
+        StartingRole,
         FocusedRole,
         PinnedRole
     };
@@ -90,12 +92,15 @@ private:
     ApplicationManager *m_applicationManager;
     bool m_includePinnedApps = false;
 
+    Application *addApplication(const QString &appId, bool pinned);
+
     QStringList defaultPinnedApps();
 
     void pinLauncher(const QString &appId, bool pinned);
 
     bool moveRows(int sourceRow, int count, int destinationChild);
-    bool moveRows(const QModelIndex & sourceParent, int sourceRow, int count, const QModelIndex & destinationParent, int destinationChild) Q_DECL_OVERRIDE;
+    bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
+                  const QModelIndex &destinationParent, int destinationChild) Q_DECL_OVERRIDE;
 };
 
 QML_DECLARE_TYPE(LauncherModel)

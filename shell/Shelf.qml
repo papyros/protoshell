@@ -1,8 +1,8 @@
 import QtQuick 2.6
 import QtQuick.Window 2.2
 import Material 0.3
-import org.kde.kquickcontrolsaddons 2.0
 import io.papyros.shell 0.1
+import "components"
 
 Item {
     anchors {
@@ -16,6 +16,7 @@ Item {
     LauncherModel {
         id: applications
         applicationManager: compositor.applicationManager
+        includePinnedApplications: true
     }
 
     Row {
@@ -30,20 +31,14 @@ Item {
                 width: 48
                 height: width
 
-                QIconItem {
+                AppIcon {
                     id: __icon
 
-                    property real ratio: Screen.devicePixelRatio
+                    anchors.fill: parent
 
-                    anchors.centerIn: parent
-
-                    scale: 1/ratio
-                    width: 48 * ratio
-                    height: width
-
-                    icon: desktopFile.iconName
-
-                    anchors.verticalCenter: parent.verticalCenter
+                    iconName: desktopFile.iconName
+                    name: desktopFile.name
+                    hasIcon: desktopFile.hasIcon
                 }
             }
         }

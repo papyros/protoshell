@@ -30,51 +30,52 @@
 using namespace GreenIsland::Server;
 
 Application::Application(const QString &appId, bool pinned, LauncherModel *launcherModel)
-		: QObject(launcherModel), m_launcherModel(launcherModel),
-          m_appId(appId), m_focused(false), m_pinned(pinned),
-		  m_state(Application::NotRunning)
+        : QObject(launcherModel), m_launcherModel(launcherModel), m_appId(appId), m_focused(false),
+          m_pinned(pinned), m_state(Application::NotRunning)
 {
-	m_desktopFile = new DesktopFile(appId, this);
+    m_desktopFile = new DesktopFile(appId, this);
 }
 
 Application::Application(const QString &appId, LauncherModel *launcherModel)
-		: Application(appId, false, launcherModel)
+        : Application(appId, false, launcherModel)
 {
 }
 
 void Application::setPinned(bool pinned)
 {
-	if (pinned == m_pinned)
-		return;
+    if (pinned == m_pinned)
+        return;
 
-	m_pinned = pinned;
-	emit pinnedChanged();
+    m_pinned = pinned;
+    emit pinnedChanged();
 }
 
 void Application::setState(State state)
 {
-	if (state == m_state)
-		return;
+    if (state == m_state)
+        return;
 
-	m_state = state;
-	emit stateChanged();
+    m_state = state;
+    emit stateChanged();
 }
 
 void Application::setFocused(bool focused)
 {
-	if (focused == m_focused)
-		return;
+    if (focused == m_focused)
+        return;
 
-	m_focused = focused;
-	emit focusedChanged();
+    m_focused = focused;
+    emit focusedChanged();
 }
 
-bool Application::launch(const QStringList& urls)
+bool Application::launch(const QStringList &urls)
 {
-	if (isRunning())
+    if (isRunning())
         return true;
 
     desktopFile()->launch(urls);
+
+    setState(Application::Starting);
 
     Q_EMIT launched();
 
@@ -83,7 +84,7 @@ bool Application::launch(const QStringList& urls)
 
 bool Application::quit()
 {
-	if (!isRunning())
+    if (!isRunning())
         return false;
 
     m_launcherModel->applicationManager()->quit(appId());

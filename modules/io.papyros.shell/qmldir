@@ -1,3 +1,5 @@
 module io.papyros.shell
 
 plugin papyrosdesktop
+
+singleton ShellSettings 0.1 ShellSettings.qml
