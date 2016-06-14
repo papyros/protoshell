@@ -1,0 +1,3 @@
+module io.papyros.shell
+
+plugin papyrosdesktop

@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import Material 0.3
 import org.kde.kquickcontrolsaddons 2.0
+import io.papyros.shell 0.1
 
 Item {
     anchors {
@@ -12,13 +13,18 @@ Item {
     width: row.width
     height: 64
 
+    LauncherModel {
+        id: applications
+        applicationManager: compositor.applicationManager
+    }
+
     Row {
         id: row
         spacing: 16
         anchors.centerIn: parent
 
         Repeater {
-            model: ["system-file-manager", "firefox", "internet-mail", "terminal", "atom", "software-store"]
+            model: applications
 
             delegate: Item {
                 width: 48
@@ -35,7 +41,7 @@ Item {
                     width: 48 * ratio
                     height: width
 
-                    icon: modelData
+                    icon: desktopFile.iconName
 
                     anchors.verticalCenter: parent.verticalCenter
                 }
