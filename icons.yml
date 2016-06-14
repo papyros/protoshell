@@ -1,0 +1,9 @@
+icons:
+    - action/alarm
+    - action/power_settings_new
+    - av/volume_down
+    - communication/call
+    - communication/email
+    - communication/message
+    - device/network_wifi
+    - device/battery_charging_full

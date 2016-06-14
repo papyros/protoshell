@@ -1,0 +1,24 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+
+<qresource prefix="/icons/action">
+	<file alias="alarm.svg">action_alarm.svg</file>
+	<file alias="power_settings_new.svg">action_power_settings_new.svg</file>
+</qresource>
+
+<qresource prefix="/icons/communication">
+	<file alias="call.svg">communication_call.svg</file>
+	<file alias="email.svg">communication_email.svg</file>
+	<file alias="message.svg">communication_message.svg</file>
+</qresource>
+
+<qresource prefix="/icons/device">
+	<file alias="network_wifi.svg">device_network_wifi.svg</file>
+	<file alias="battery_charging_full.svg">device_battery_charging_full.svg</file>
+</qresource>
+
+<qresource prefix="/icons/av">
+	<file alias="volume_down.svg">av_volume_down.svg</file>
+</qresource>
+
+</RCC>
