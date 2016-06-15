@@ -1,0 +1,5 @@
+module Papyros.Components
+AppIcon 0.1 AppIcon.qml
+CrossFadeImage 0.1 CrossFadeImage.qml
+PanelItem 0.1 PanelItem.qml
+ProgressListItem 0.1 ProgressListItem.qml

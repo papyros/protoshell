@@ -7,6 +7,10 @@ set(PROJECT_VERSION "0.1.0")
 set(PROJECT_VERSION_MAJOR 0)
 set(PROJECT_SOVERSION 0)
 
+# Options
+option(ENABLE_ALSA "Enables Alsa mixer backend" ON)
+option(ENABLE_PULSEAUDIO "Enables PulseAudio mixer backend" ON)
+
 # ECM setup
 find_package(ECM 1.4.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} "${CMAKE_SOURCE_DIR}/cmake")
@@ -27,6 +31,7 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FR
 
 # Minimum version requirements
 set(QT_MIN_VERSION "5.6.0")
+set(KF5_MIN_VERSION "5.8.0")
 
 find_package(GreenIsland 0.7.90 REQUIRED COMPONENTS Server)
 
@@ -40,9 +45,14 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
              Qml
              Quick)
 
+# Find KF5
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
+             Solid Declarative NetworkManagerQt)
+
 find_package(QT5XDG REQUIRED)
 find_package(Papyros REQUIRED)
 
+add_subdirectory(headers)
 add_subdirectory(modules)
 
 greenisland_install_shell(io.papyros.shell shell)

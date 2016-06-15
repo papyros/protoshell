@@ -34,5 +34,6 @@ Item {
                 output.geometry.y + insets.top,
                 output.geometry.width - insets.left - insets.right,
                 output.geometry.height - insets.top - insets.bottom)
+        console.log(output.availableGeometry, output.geometry)
     }
 }

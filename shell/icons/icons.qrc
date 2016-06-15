@@ -1,11 +1,6 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
 
-<qresource prefix="/icons/action">
-	<file alias="alarm.svg">action_alarm.svg</file>
-	<file alias="power_settings_new.svg">action_power_settings_new.svg</file>
-</qresource>
-
 <qresource prefix="/icons/communication">
 	<file alias="call.svg">communication_call.svg</file>
 	<file alias="email.svg">communication_email.svg</file>
@@ -15,10 +10,31 @@
 <qresource prefix="/icons/device">
 	<file alias="network_wifi.svg">device_network_wifi.svg</file>
 	<file alias="battery_charging_full.svg">device_battery_charging_full.svg</file>
+	<file alias="battery_50.svg">device_battery_50.svg</file>
+	<file alias="signal_wifi_2_bar.svg">device_signal_wifi_2_bar.svg</file>
+	<file alias="signal_wifi_3_bar.svg">device_signal_wifi_3_bar.svg</file>
+</qresource>
+
+<qresource prefix="/icons/file">
+	<file alias="file_download.svg">file_file_download.svg</file>
 </qresource>
 
 <qresource prefix="/icons/av">
 	<file alias="volume_down.svg">av_volume_down.svg</file>
+	<file alias="volume_up.svg">av_volume_up.svg</file>
+	<file alias="volume_off.svg">av_volume_off.svg</file>
+</qresource>
+
+<qresource prefix="/icons/action">
+	<file alias="account_circle.svg">action_account_circle.svg</file>
+	<file alias="alarm.svg">action_alarm.svg</file>
+	<file alias="lock.svg">action_lock.svg</file>
+	<file alias="power_settings_new.svg">action_power_settings_new.svg</file>
+</qresource>
+
+<qresource prefix="/icons/navigation">
+	<file alias="apps.svg">navigation_apps.svg</file>
+	<file alias="check.svg">navigation_check.svg</file>
 </qresource>
 
 </RCC>

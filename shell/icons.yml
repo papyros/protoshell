@@ -1,9 +1,19 @@
 icons:
+    - action/account_circle
     - action/alarm
+    - action/lock
     - action/power_settings_new
     - av/volume_down
+    - av/volume_up
+    - av/volume_off
     - communication/call
     - communication/email
     - communication/message
     - device/network_wifi
     - device/battery_charging_full
+    - device/battery_50
+    - device/signal_wifi_2_bar
+    - device/signal_wifi_3_bar
+    - file/file_download
+    - navigation/apps
+    - navigation/check

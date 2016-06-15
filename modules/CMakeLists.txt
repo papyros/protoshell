@@ -1,1 +1,1 @@
-add_subdirectory(io.papyros.shell)
+add_subdirectory(Papyros)
