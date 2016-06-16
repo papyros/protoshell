@@ -89,7 +89,7 @@ private slots:
 private:
     QList<Application *> m_list;
     KSharedConfigPtr m_config;
-    ApplicationManager *m_applicationManager;
+    ApplicationManager *m_applicationManager = nullptr;
     bool m_includePinnedApps = false;
 
     Application *addApplication(const QString &appId, bool pinned);

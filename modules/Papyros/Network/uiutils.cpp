@@ -49,7 +49,8 @@
 
 using namespace NetworkManager;
 
-QString UiUtils::interfaceTypeLabel(const NetworkManager::Device::Type type, const NetworkManager::Device::Ptr iface)
+QString UiUtils::interfaceTypeLabel(const NetworkManager::Device::Type type,
+                                    const NetworkManager::Device::Ptr iface)
 {
     QString deviceText;
     switch (type) {
@@ -92,9 +93,10 @@ QString UiUtils::interfaceTypeLabel(const NetworkManager::Device::Type type, con
         break;
 #endif
     case NetworkManager::Device::Modem: {
-        const NetworkManager::ModemDevice::Ptr nmModemIface = iface.objectCast<NetworkManager::ModemDevice>();
+        const NetworkManager::ModemDevice::Ptr nmModemIface =
+                iface.objectCast<NetworkManager::ModemDevice>();
         if (nmModemIface) {
-            switch(modemSubType(nmModemIface->currentCapabilities())) {
+            switch (modemSubType(nmModemIface->currentCapabilities())) {
             case NetworkManager::ModemDevice::Pots:
                 /*: title of the interface widget in nm's popup */
                 deviceText = QObject::tr("Serial Modem");
@@ -106,12 +108,14 @@ QString UiUtils::interfaceTypeLabel(const NetworkManager::Device::Type type, con
                 deviceText = QObject::tr("Mobile Broadband");
                 break;
             case NetworkManager::ModemDevice::NoCapability:
-                qCWarning(NM) << "Unhandled modem sub type: NetworkManager::ModemDevice::NoCapability";
+                qCWarning(NM)
+                        << "Unhandled modem sub type: NetworkManager::ModemDevice::NoCapability";
+                break;
+            default:
                 break;
             }
         }
-    }
-        break;
+    } break;
     case NetworkManager::Device::Ethernet:
     default:
         /*: title of the interface widget in nm's popup */
@@ -121,7 +125,8 @@ QString UiUtils::interfaceTypeLabel(const NetworkManager::Device::Type type, con
     return deviceText;
 }
 
-QString UiUtils::iconAndTitleForConnectionSettingsType(NetworkManager::ConnectionSettings::ConnectionType type, QString &title)
+QString UiUtils::iconAndTitleForConnectionSettingsType(
+        NetworkManager::ConnectionSettings::ConnectionType type, QString &title)
 {
     QString text;
     QString icon = "network-wired";
@@ -187,7 +192,8 @@ QString UiUtils::iconAndTitleForConnectionSettingsType(NetworkManager::Connectio
     return icon;
 }
 
-QString UiUtils::prettyInterfaceName(NetworkManager::Device::Type type, const QString &interfaceName)
+QString UiUtils::prettyInterfaceName(NetworkManager::Device::Type type,
+                                     const QString &interfaceName)
 {
     QString ret;
     switch (type) {
@@ -218,70 +224,71 @@ QString UiUtils::prettyInterfaceName(NetworkManager::Device::Type type, const QS
     return ret;
 }
 
-QString UiUtils::connectionStateToString(NetworkManager::Device::State state, const QString &connectionName)
+QString UiUtils::connectionStateToString(NetworkManager::Device::State state,
+                                         const QString &connectionName)
 {
     QString stateString;
     switch (state) {
-        case NetworkManager::Device::UnknownState:
-            /*: description of unknown network interface state */
-            stateString = QObject::tr("Unknown");
-            break;
-        case NetworkManager::Device::Unmanaged:
-            /*: description of unmanaged network interface state */
-            stateString = QObject::tr("Unmanaged");
-            break;
-        case NetworkManager::Device::Unavailable:
-            /*: description of unavailable network interface state */
-            stateString = QObject::tr("Unavailable");
-            break;
-        case NetworkManager::Device::Disconnected:
-            /*: description of unconnected network interface state */
-            stateString = QObject::tr("Not connected");
-            break;
-        case NetworkManager::Device::Preparing:
-            /*: description of preparing to connect network interface state */
-            stateString = QObject::tr("Preparing to connect");
-            break;
-        case NetworkManager::Device::ConfiguringHardware:
-            /*: description of configuring hardware network interface state */
-            stateString = QObject::tr("Configuring interface");
-            break;
-        case NetworkManager::Device::NeedAuth:
-            /*: description of waiting for authentication network interface state */
-            stateString = QObject::tr("Waiting for authorization");
-            break;
-        case NetworkManager::Device::ConfiguringIp:
-            /*: network interface doing dhcp request in most cases */
-            stateString = QObject::tr("Setting network address");
-            break;
-        case NetworkManager::Device::CheckingIp:
-            /*: is other action required to fully connect? captive portals, etc. */
-            stateString = QObject::tr("Checking further connectivity");
-            break;
-        case NetworkManager::Device::WaitingForSecondaries:
-            /*: a secondary connection (e.g. VPN) has to be activated first to continue */
-            stateString = QObject::tr("Waiting for a secondary connection");
-            break;
-        case NetworkManager::Device::Activated:
-            if (connectionName.isEmpty()) {
-                /*: network interface connected state label */
-                stateString = QObject::tr("Connected");
-            } else {
-                /*: network interface connected state label */
-                stateString = QObject::tr("Connected to %1").arg(connectionName);
-            }
-            break;
-        case NetworkManager::Device::Deactivating:
-            /*: network interface disconnecting state label */
-            stateString = QObject::tr("Deactivating connection");
-            break;
-        case NetworkManager::Device::Failed:
-            /*: description of unknown network interface state */
-            stateString = QObject::tr("Connection Failed");
-            break;
-        default:
-            /*: interface state */
-            stateString = QObject::tr("Error: Invalid state");
+    case NetworkManager::Device::UnknownState:
+        /*: description of unknown network interface state */
+        stateString = QObject::tr("Unknown");
+        break;
+    case NetworkManager::Device::Unmanaged:
+        /*: description of unmanaged network interface state */
+        stateString = QObject::tr("Unmanaged");
+        break;
+    case NetworkManager::Device::Unavailable:
+        /*: description of unavailable network interface state */
+        stateString = QObject::tr("Unavailable");
+        break;
+    case NetworkManager::Device::Disconnected:
+        /*: description of unconnected network interface state */
+        stateString = QObject::tr("Not connected");
+        break;
+    case NetworkManager::Device::Preparing:
+        /*: description of preparing to connect network interface state */
+        stateString = QObject::tr("Preparing to connect");
+        break;
+    case NetworkManager::Device::ConfiguringHardware:
+        /*: description of configuring hardware network interface state */
+        stateString = QObject::tr("Configuring interface");
+        break;
+    case NetworkManager::Device::NeedAuth:
+        /*: description of waiting for authentication network interface state */
+        stateString = QObject::tr("Waiting for authorization");
+        break;
+    case NetworkManager::Device::ConfiguringIp:
+        /*: network interface doing dhcp request in most cases */
+        stateString = QObject::tr("Setting network address");
+        break;
+    case NetworkManager::Device::CheckingIp:
+        /*: is other action required to fully connect? captive portals, etc. */
+        stateString = QObject::tr("Checking further connectivity");
+        break;
+    case NetworkManager::Device::WaitingForSecondaries:
+        /*: a secondary connection (e.g. VPN) has to be activated first to continue */
+        stateString = QObject::tr("Waiting for a secondary connection");
+        break;
+    case NetworkManager::Device::Activated:
+        if (connectionName.isEmpty()) {
+            /*: network interface connected state label */
+            stateString = QObject::tr("Connected");
+        } else {
+            /*: network interface connected state label */
+            stateString = QObject::tr("Connected to %1").arg(connectionName);
+        }
+        break;
+    case NetworkManager::Device::Deactivating:
+        /*: network interface disconnecting state label */
+        stateString = QObject::tr("Deactivating connection");
+        break;
+    case NetworkManager::Device::Failed:
+        /*: description of unknown network interface state */
+        stateString = QObject::tr("Connection Failed");
+        break;
+    default:
+        /*: interface state */
+        stateString = QObject::tr("Error: Invalid state");
     }
     return stateString;
 }
@@ -290,41 +297,42 @@ QString UiUtils::vpnConnectionStateToString(VpnConnection::State state)
 {
     QString stateString;
     switch (state) {
-        case VpnConnection::Unknown:
-            /*: The state of the VPN connection is unknown */
-            stateString = QObject::tr("Unknown");
-            break;
-        case VpnConnection::Prepare:
-            /*: The VPN connection is preparing to connect */
-            stateString = QObject::tr("Preparing to connect");
-            break;
-        case VpnConnection::NeedAuth:
-            /*: The VPN connection needs authorization credentials */
-            stateString = QObject::tr("Needs authorization");
-            break;
-        case VpnConnection::Connecting:
-            /*: The VPN connection is being established */
-            stateString = QObject::tr("Connecting");
-            break;
-        case VpnConnection::GettingIpConfig:
-            /*: The VPN connection is getting an IP address */
-            stateString = QObject::tr("Setting network address");
-            break;
-        case VpnConnection::Activated:
-            /*: The VPN connection is active */
-            stateString = QObject::tr("Activated");
-            break;
-        case VpnConnection::Failed:
-            /*: The VPN connection failed */
-            stateString = QObject::tr("Failed");
-            break;
-        case VpnConnection::Disconnected:
-            /*: The VPN connection is disconnected */
-            stateString = QObject::tr("Failed");
-            break;
-        default:
-            /*: interface state */
-            stateString = QObject::tr("interface state", "Error: Invalid state");    }
+    case VpnConnection::Unknown:
+        /*: The state of the VPN connection is unknown */
+        stateString = QObject::tr("Unknown");
+        break;
+    case VpnConnection::Prepare:
+        /*: The VPN connection is preparing to connect */
+        stateString = QObject::tr("Preparing to connect");
+        break;
+    case VpnConnection::NeedAuth:
+        /*: The VPN connection needs authorization credentials */
+        stateString = QObject::tr("Needs authorization");
+        break;
+    case VpnConnection::Connecting:
+        /*: The VPN connection is being established */
+        stateString = QObject::tr("Connecting");
+        break;
+    case VpnConnection::GettingIpConfig:
+        /*: The VPN connection is getting an IP address */
+        stateString = QObject::tr("Setting network address");
+        break;
+    case VpnConnection::Activated:
+        /*: The VPN connection is active */
+        stateString = QObject::tr("Activated");
+        break;
+    case VpnConnection::Failed:
+        /*: The VPN connection failed */
+        stateString = QObject::tr("Failed");
+        break;
+    case VpnConnection::Disconnected:
+        /*: The VPN connection is disconnected */
+        stateString = QObject::tr("Failed");
+        break;
+    default:
+        /*: interface state */
+        stateString = QObject::tr("interface state", "Error: Invalid state");
+    }
     return stateString;
 }
 
@@ -332,24 +340,24 @@ QString UiUtils::operationModeToString(NetworkManager::WirelessDevice::Operation
 {
     QString modeString;
     switch (mode) {
-        case NetworkManager::WirelessDevice::WirelessDevice::Unknown:
-            /*: wireless network operation mode */
-            modeString = QObject::tr("Unknown");
-            break;
-        case NetworkManager::WirelessDevice::Adhoc:
-            /*: wireless network operation mode */
-            modeString = QObject::tr("Adhoc");
-            break;
-        case NetworkManager::WirelessDevice::WirelessDevice::Infra:
-            /*: wireless network operation mode */
-            modeString = QObject::tr("Infrastructure");
-            break;
-        case NetworkManager::WirelessDevice::WirelessDevice::ApMode:
-            /*: wireless network operation mode */
-            modeString = QObject::tr("Access point");
-            break;
-        default:
-            modeString = QT_TR_NOOP("INCORRECT MODE FIX ME");
+    case NetworkManager::WirelessDevice::WirelessDevice::Unknown:
+        /*: wireless network operation mode */
+        modeString = QObject::tr("Unknown");
+        break;
+    case NetworkManager::WirelessDevice::Adhoc:
+        /*: wireless network operation mode */
+        modeString = QObject::tr("Adhoc");
+        break;
+    case NetworkManager::WirelessDevice::WirelessDevice::Infra:
+        /*: wireless network operation mode */
+        modeString = QObject::tr("Infrastructure");
+        break;
+    case NetworkManager::WirelessDevice::WirelessDevice::ApMode:
+        /*: wireless network operation mode */
+        modeString = QObject::tr("Access point");
+        break;
+    default:
+        modeString = QT_TR_NOOP("INCORRECT MODE FIX ME");
     }
     return modeString;
 }
@@ -404,7 +412,6 @@ QStringList UiUtils::wpaFlagsToStringList(NetworkManager::AccessPoint::WpaFlags 
     return flagList;
 }
 
-
 QString UiUtils::connectionSpeed(double bitrate)
 {
     QString out;
@@ -413,10 +420,10 @@ QString UiUtils::connectionSpeed(double bitrate)
         out = QObject::tr("%1 Bit/s").arg(bitrate);
     } else if (bitrate < 1000000) {
         /*: connection speed */
-        out = QObject::tr("%1 MBit/s").arg(bitrate/1000);
+        out = QObject::tr("%1 MBit/s").arg(bitrate / 1000);
     } else {
         /*: connection speed */
-        out = QObject::tr("%1 GBit/s").arg(bitrate/1000000);
+        out = QObject::tr("%1 GBit/s").arg(bitrate / 1000000);
     }
     return out;
 }
@@ -424,18 +431,15 @@ QString UiUtils::connectionSpeed(double bitrate)
 QString UiUtils::wirelessBandToString(NetworkManager::WirelessSetting::FrequencyBand band)
 {
     switch (band) {
-        case NetworkManager::WirelessSetting::Automatic:
-            return QLatin1String("automatic");
-            break;
-        case NetworkManager::WirelessSetting::A:
-            return QLatin1String("a");
-            break;
-        case NetworkManager::WirelessSetting::Bg:
-            return QLatin1String("b/g");
-            break;
+    case NetworkManager::WirelessSetting::Automatic:
+        return QLatin1String("automatic");
+    case NetworkManager::WirelessSetting::A:
+        return QLatin1String("a");
+    case NetworkManager::WirelessSetting::Bg:
+        return QLatin1String("b/g");
+    default:
+        return QString();
     }
-
-    return QString();
 }
 
 #if WITH_MODEMMANAGER_SUPPORT
@@ -583,18 +587,23 @@ QString UiUtils::convertLockReasonToString(MMModemLock reason)
 QString UiUtils::convertNspTypeToString(WimaxNsp::NetworkType type)
 {
     switch (type) {
-        /*: unknown Wimax NSP type */
-        case WimaxNsp::Unknown: return QObject::tr("Unknown");
-        case WimaxNsp::Home: return QObject::tr("Home");
-        case WimaxNsp::Partner: return QObject::tr("Partner");
-        case WimaxNsp::RoamingPartner: return QObject::tr("Roaming partner");
+    /*: unknown Wimax NSP type */
+    case WimaxNsp::Unknown:
+        return QObject::tr("Unknown");
+    case WimaxNsp::Home:
+        return QObject::tr("Home");
+    case WimaxNsp::Partner:
+        return QObject::tr("Partner");
+    case WimaxNsp::RoamingPartner:
+        return QObject::tr("Roaming partner");
+    default:
+        /*: Unknown */
+        return QObject::tr("Unknown Wimax NSP type");
     }
-
-    /*: Unknown */
-    return QObject::tr("Unknown Wimax NSP type");
 }
 
-NetworkManager::ModemDevice::Capability UiUtils::modemSubType(NetworkManager::ModemDevice::Capabilities modemCaps)
+NetworkManager::ModemDevice::Capability
+UiUtils::modemSubType(NetworkManager::ModemDevice::Capabilities modemCaps)
 {
     if (modemCaps & NetworkManager::ModemDevice::Lte) {
         return NetworkManager::ModemDevice::Lte;
@@ -612,60 +621,62 @@ QString UiUtils::labelFromWirelessSecurity(NetworkManager::WirelessSecurityType 
 {
     QString tip;
     switch (type) {
-        case NetworkManager::NoneSecurity:
-            /*: @label no security */
-            tip = QObject::tr("Insecure");
-            break;
-        case NetworkManager::StaticWep:
-            /*: @label WEP security */
-            tip = QObject::tr("WEP");
-            break;
-        case NetworkManager::Leap:
-            /*: @label LEAP security */
-            tip = QObject::tr("LEAP");
-            break;
-        case NetworkManager::DynamicWep:
-            /*: @label Dynamic WEP security */
-            tip = QObject::tr("Dynamic WEP");
-            break;
-        case NetworkManager::WpaPsk:
-            /*: @label WPA-PSK security */
-            tip = QObject::tr("WPA-PSK");
-            break;
-        case NetworkManager::WpaEap:
-            /*: @label WPA-EAP security */
-            tip = QObject::tr("WPA-EAP");
-            break;
-        case NetworkManager::Wpa2Psk:
-            /*: @label WPA2-PSK security */
-            tip = QObject::tr("WPA2-PSK");
-            break;
-        case NetworkManager::Wpa2Eap:
-            /*: @label WPA2-EAP security */
-            tip = QObject::tr("WPA2-EAP");
-            break;
-        default:
-            /*: @label unknown security */
-            tip = QObject::tr("Unknown security type");
-            break;
+    case NetworkManager::NoneSecurity:
+        /*: @label no security */
+        tip = QObject::tr("Insecure");
+        break;
+    case NetworkManager::StaticWep:
+        /*: @label WEP security */
+        tip = QObject::tr("WEP");
+        break;
+    case NetworkManager::Leap:
+        /*: @label LEAP security */
+        tip = QObject::tr("LEAP");
+        break;
+    case NetworkManager::DynamicWep:
+        /*: @label Dynamic WEP security */
+        tip = QObject::tr("Dynamic WEP");
+        break;
+    case NetworkManager::WpaPsk:
+        /*: @label WPA-PSK security */
+        tip = QObject::tr("WPA-PSK");
+        break;
+    case NetworkManager::WpaEap:
+        /*: @label WPA-EAP security */
+        tip = QObject::tr("WPA-EAP");
+        break;
+    case NetworkManager::Wpa2Psk:
+        /*: @label WPA2-PSK security */
+        tip = QObject::tr("WPA2-PSK");
+        break;
+    case NetworkManager::Wpa2Eap:
+        /*: @label WPA2-EAP security */
+        tip = QObject::tr("WPA2-EAP");
+        break;
+    default:
+        /*: @label unknown security */
+        tip = QObject::tr("Unknown security type");
+        break;
     }
     return tip;
 }
 
-QString UiUtils::formatDateRelative(const QDateTime & lastUsed)
+QString UiUtils::formatDateRelative(const QDateTime &lastUsed)
 {
     QString lastUsedText;
     if (lastUsed.isValid()) {
         const QDateTime now = QDateTime::currentDateTime();
-        if (lastUsed.daysTo(now) == 0 ) {
+        if (lastUsed.daysTo(now) == 0) {
             const int secondsAgo = lastUsed.secsTo(now);
-            if (secondsAgo < (60 * 60 )) {
+            if (secondsAgo < (60 * 60)) {
                 const int minutesAgo = secondsAgo / 60;
-                /*: Label for last used time for a network connection used in the last hour, as the number of minutes since usage */
+                /*: Label for last used time for a network connection used in the last hour, as the
+                 * number of minutes since usage */
                 lastUsedText = QObject::tr("%n minute(s) ago", "", minutesAgo);
             } else {
                 const int hoursAgo = secondsAgo / (60 * 60);
-                /*: Label for last used time for a network connection used in the last day, as the number of hours since usage */
+                /*: Label for last used time for a network connection used in the last day, as the
+                 * number of hours since usage */
                 lastUsedText = QObject::tr("%n hour(s) ago", "", hoursAgo);
             }
         } else if (lastUsed.daysTo(now) == 1) {
@@ -676,36 +687,39 @@ QString UiUtils::formatDateRelative(const QDateTime & lastUsed)
         }
     } else {
         /*: Label for last used time for a network connection that has never been used */
-        lastUsedText =  QObject::tr("Never");
+        lastUsedText = QObject::tr("Never");
     }
     return lastUsedText;
 }
 
-QString UiUtils::formatLastUsedDateRelative(const QDateTime & lastUsed)
+QString UiUtils::formatLastUsedDateRelative(const QDateTime &lastUsed)
 {
     QString lastUsedText;
     if (lastUsed.isValid()) {
         const QDateTime now = QDateTime::currentDateTime();
-        if (lastUsed.daysTo(now) == 0 ) {
+        if (lastUsed.daysTo(now) == 0) {
             const int secondsAgo = lastUsed.secsTo(now);
-            if (secondsAgo < (60 * 60 )) {
+            if (secondsAgo < (60 * 60)) {
                 const int minutesAgo = secondsAgo / 60;
-                /*: Label for last used time for a network connection used in the last hour, as the number of minutes since usage */
+                /*: Label for last used time for a network connection used in the last hour, as the
+                 * number of minutes since usage */
                 lastUsedText = QObject::tr("Last used %n minute(s) ago", "", minutesAgo);
             } else {
                 const int hoursAgo = secondsAgo / (60 * 60);
-                /*: Label for last used time for a network connection used in the last day, as the number of hours since usage */
+                /*: Label for last used time for a network connection used in the last day, as the
+                 * number of hours since usage */
                 lastUsedText = QObject::tr("Last used %n hour(s) ago", "", hoursAgo);
             }
         } else if (lastUsed.daysTo(now) == 1) {
             /*: Label for last used time for a network connection used the previous day */
             lastUsedText = QObject::tr("Last used yesterday");
         } else {
-            lastUsedText = QObject::tr("Last used on %1").arg(QLocale().toString(lastUsed.date(), QLocale::ShortFormat));
+            lastUsedText = QObject::tr("Last used on %1")
+                                   .arg(QLocale().toString(lastUsed.date(), QLocale::ShortFormat));
         }
     } else {
         /*: Label for last used time for a network connection that has never been used */
-        lastUsedText =  QObject::tr("Never used");
+        lastUsedText = QObject::tr("Never used");
     }
     return lastUsedText;
 }

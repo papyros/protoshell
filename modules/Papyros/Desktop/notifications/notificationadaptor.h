@@ -33,32 +33,32 @@ class NotificationAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.freedesktop.Notifications")
 public:
-
-    enum CloseReason {
+    enum CloseReason
+    {
         Expired = 1,
         Dismissed = 2,
         Requested = 3,
         Unknown = 4
     };
 
-    NotificationAdaptor(QObject *parent, NotificationServer *server) : QDBusAbstractAdaptor(parent) {
-        this->server = server;
+    NotificationAdaptor(QObject *parent, NotificationServer *server)
+            : QDBusAbstractAdaptor(parent), m_server(server)
+    {
+        // Nothing needed here
     }
 
 public slots:
-    QStringList GetCapabilities()
-    {
-        return QStringList() << "body";
-    }
+    QStringList GetCapabilities() { return QStringList() << "body"; }
 
     void CloseNotification(uint id)
     {
-        server->onNotificationRemoved(id);
+        m_server->onNotificationRemoved(id);
 
         emit NotificationClosed(id, Requested);
     }
 
-    void GetServerInformation(QString &name, QString &vendor, QString &version, QString &spec_version)
+    void GetServerInformation(QString &name, QString &vendor, QString &version,
+                              QString &spec_version)
     {
         name = "Papyros Notification Server";
         vendor = "Papyros";
@@ -66,18 +66,18 @@ public slots:
         spec_version = "1.2"; // TODO: Check that this is correct
     }
 
-    uint Notify(QString app_name, uint replaces_id, QString app_icon, QString summary,
-            QString body, QStringList actions, QVariantMap hints, int expire_timeout)
+    uint Notify(QString app_name, uint replaces_id, QString app_icon, QString summary, QString body,
+                QStringList actions, QVariantMap hints, int expire_timeout)
     {
-        Notification *notification = server->notify(app_name, replaces_id, app_icon, summary,
-                body, actions, hints, expire_timeout);
+        Notification *notification = m_server->notify(app_name, replaces_id, app_icon, summary,
+                                                      body, actions, hints, expire_timeout);
 
         return notification->m_id;
     }
 
     void closeNotification(int id)
     {
-        server->onNotificationRemoved(id);
+        m_server->onNotificationRemoved(id);
         emit NotificationClosed(id, Dismissed);
     }
 
@@ -86,8 +86,7 @@ signals:
     void ActionInvoked(uint id, QString action_key);
 
 private:
-
-    NotificationServer *server;
+    NotificationServer *m_server;
 };
 
 #endif // NOTIFICATIONADAPTOR_H

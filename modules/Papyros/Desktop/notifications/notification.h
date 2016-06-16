@@ -39,22 +39,23 @@ class Notification : public QObject
     Q_PROPERTY(int progress MEMBER m_progress CONSTANT)
     Q_ENUMS(Urgency)
 public:
-    enum Urgency {
-        Low, Normal, Critical
+    enum Urgency
+    {
+        Low,
+        Normal,
+        Critical
     };
+
     explicit Notification(QString &app_name, uint id, QString &app_icon, QString &summary,
-            QString &body, QStringList actions, QVariantMap &hints, int &expire_timeout,
-            int &progress, QObject *parent = 0) : QObject(parent){
-        m_app_name = app_name;
-        m_id = id;
-        m_app_icon = app_icon;
-        m_summary = summary;
-        m_body = body;
-        m_actions = actions;
-        m_hints = hints;
-        m_expire_timeout = expire_timeout;
-        m_progress = progress;
+                          QString &body, QStringList actions, QVariantMap &hints,
+                          int &expire_timeout, int &progress, QObject *parent = 0)
+            : QObject(parent), m_app_name(app_name), m_id(id), m_app_icon(app_icon),
+              m_summary(summary), m_body(body), m_actions(actions), m_hints(hints),
+              m_expire_timeout(expire_timeout), m_progress(progress)
+    {
+        // Nothing needed here
     }
+
     QString m_app_name;
     uint m_id;
     QString m_app_icon;
@@ -64,9 +65,10 @@ public:
     QVariantMap m_hints;
     int m_expire_timeout;
     int m_progress;
-    QTimer *m_timer = nullptr;
+    QTimer *m_timer;
 
-    void timeout(const QObject * receiver, const char *slot) {
+    void timeout(const QObject *receiver, const char *slot)
+    {
         if (m_timer) {
             m_timer->stop();
             delete m_timer;
