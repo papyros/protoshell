@@ -8,6 +8,7 @@ BaseDesktop {
     id: desktop
 
     property alias surfacesArea: workspace.surfacesLayer
+    property alias overlayLayer: desktopOverlayLayer
 
     property bool hasFullscreenWindow: {
         for (var i = 0; i < windows.length; i++) {
@@ -31,20 +32,28 @@ BaseDesktop {
         return dp * Units.dp
     }
 
+    function updateTooltip(item, containsMouse) {
+        if (containsMouse) {
+            if (item.tooltip) {
+                tooltip.text = Qt.binding(function() { return item.tooltip })
+                tooltip.open(item, 0, dp(16))
+            }
+        } else if (tooltip.showing) {
+            tooltip.close()
+        }
+    }
+
+    Tooltip {
+        id: tooltip
+        overlayLayer: "desktopTooltipOverlayLayer"
+    }
+
     Workspace { id: workspace }
 
     NotificationsView { id: notificationsView }
 
     OverlayLayer {
-        id: tooltipOverlayLayer
-        objectName: "desktopTooltipOverlayLayer"
-        z: 100
-        enabled: desktopOverlayLayer.currentOverlay == null
-    }
-
-    OverlayLayer {
         id: desktopOverlayLayer
-        z: 99
         objectName: "desktopOverlayLayer"
 
         // FIXME: shell
@@ -52,6 +61,12 @@ BaseDesktop {
         //     if (currentOverlay && shell.state !== "default" && shell.state !== "locked")
         //         shell.state = "default"
         // }
+    }
+
+    OverlayLayer {
+        id: tooltipOverlayLayer
+        objectName: "desktopTooltipOverlayLayer"
+        enabled: desktopOverlayLayer.currentOverlay == null
     }
 
     Panel { id: panel }
