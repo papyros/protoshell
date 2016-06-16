@@ -32,6 +32,8 @@ Object {
     property color color: "transparent"
     property bool circleClipIcon
 
+    property Component iconView
+
     property Component view
 
     function close() {

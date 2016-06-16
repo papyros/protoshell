@@ -54,12 +54,20 @@ PanelItem {
             dropdown.open(indicatorView, 0, dp(16))
     }
 
+    Loader {
+        id: iconView
+        anchors.centerIn: parent
+        sourceComponent: indicator.iconView
+
+        property alias iconSize: indicatorView.iconSize
+    }
+
     Icon {
         anchors.centerIn: parent
         size: iconSize
         source: indicator.iconSource
         color: indicator.color.a == 0 ? defaultColor : indicator.color
-        visible: !circleImage.visible
+        visible: !circleImage.visible && !indicator.iconView
     }
 
     CircleImage {
@@ -68,7 +76,7 @@ PanelItem {
         width: iconSize * 1.2
         height: width
         source: visible ? indicator.iconSource : ""
-        visible: indicator.circleClipIcon && String(indicator.iconSource).indexOf("icon://") == -1
+        visible: indicator.circleClipIcon && String(indicator.iconSource).indexOf("icon://") == -1 && !indicator.iconView
     }
 
     Label {

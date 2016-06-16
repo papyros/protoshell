@@ -22,9 +22,9 @@ import Papyros.Desktop 0.1
 Indicator {
     id: indicator
 
-    text: Qt.formatTime(now)
-    tooltip: Qt.formatDate(now, Locale.LongFormat)
-    
+    text: Qt.formatTime(dateTime.now)
+    tooltip: Qt.formatDate(dateTime.now, Locale.LongFormat)
+
     view: DatePicker {
         frameVisible: false
     }

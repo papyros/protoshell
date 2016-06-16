@@ -28,7 +28,7 @@ import Papyros.Indicators 0.1
 Indicator {
     id: appDrawer
 
-    iconName: "navigation/apps"
+    iconView: AppsIcon {}
     tooltip: "Applications"
 
     // view: FocusScope {
