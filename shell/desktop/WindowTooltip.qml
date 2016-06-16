@@ -42,7 +42,7 @@ Tooltip {
             previewTimer.windows = windows
             previewTimer.app = app
             previewTimer.caller = caller
-            previewTimer.estart()
+            previewTimer.restart()
         }
     }
 
@@ -76,8 +76,7 @@ Tooltip {
                     height: dp(100)
                     width: item.width * height/item.height
 
-                    property var item: modelData.item
-                    property var window: modelData.window
+                    window: modelData.window
                 }
             }
         }

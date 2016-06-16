@@ -52,7 +52,7 @@ PanelItem {
 
     property var listView: ListView.view
 
-    property var windows: ListUtils.filter(windowManager.windows, function(modelData) {
+    property var windows: ListUtils.filter(windowsModel, function(modelData) {
         return modelData.window.appId == appId
     })
 

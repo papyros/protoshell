@@ -1,8 +1,10 @@
 import QtQuick 2.0
 import Material 0.3
+import "../base"
 import "../panel"
+import "../notifications"
 
-MaterialDesktop {
+BaseDesktop {
     id: desktop
 
     property alias surfacesArea: workspace.surfacesLayer
@@ -31,9 +33,25 @@ MaterialDesktop {
 
     Workspace { id: workspace }
 
+    NotificationsView { id: notificationsView }
+
+    OverlayLayer {
+        id: tooltipOverlayLayer
+        objectName: "desktopTooltipOverlayLayer"
+        z: 100
+        enabled: desktopOverlayLayer.currentOverlay == null
+    }
+
     OverlayLayer {
         id: desktopOverlayLayer
+        z: 99
         objectName: "desktopOverlayLayer"
+
+        // FIXME: shell
+        // onCurrentOverlayChanged: {
+        //     if (currentOverlay && shell.state !== "default" && shell.state !== "locked")
+        //         shell.state = "default"
+        // }
     }
 
     Panel { id: panel }

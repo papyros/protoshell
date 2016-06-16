@@ -6,12 +6,16 @@ icons:
     - av/volume_down
     - av/volume_up
     - av/volume_off
+    - av/volume_mute
     - communication/call
     - communication/email
     - communication/message
     - device/network_wifi
     - device/battery_charging_full
     - device/battery_50
+    - device/battery_60
+    - device/signal_wifi_0_bar
+    - device/signal_wifi_1_bar
     - device/signal_wifi_2_bar
     - device/signal_wifi_3_bar
     - file/file_download

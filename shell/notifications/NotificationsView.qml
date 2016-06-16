@@ -21,6 +21,7 @@ import Papyros.Desktop 0.1
 
 Item {
     anchors.fill: parent
+    anchors.bottomMargin: panel.height
 
     opacity: desktop.overlayLayer.currentOverlay ? 0 : 1
 
@@ -46,8 +47,7 @@ Item {
 
         width: dp(280)
 
-        verticalLayoutDirection: shell.stageName === "classic"
-                                 ? ListView.BottomToTop : ListView.TopToBottom
+        verticalLayoutDirection: ListView.BottomToTop
         orientation: Qt.Vertical
         interactive: false
 

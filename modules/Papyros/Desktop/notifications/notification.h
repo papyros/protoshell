@@ -65,7 +65,7 @@ public:
     QVariantMap m_hints;
     int m_expire_timeout;
     int m_progress;
-    QTimer *m_timer;
+    QTimer *m_timer = nullptr;
 
     void timeout(const QObject *receiver, const char *slot)
     {

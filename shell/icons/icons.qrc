@@ -11,6 +11,9 @@
 	<file alias="network_wifi.svg">device_network_wifi.svg</file>
 	<file alias="battery_charging_full.svg">device_battery_charging_full.svg</file>
 	<file alias="battery_50.svg">device_battery_50.svg</file>
+	<file alias="battery_60.svg">device_battery_60.svg</file>
+	<file alias="signal_wifi_0_bar.svg">device_signal_wifi_0_bar.svg</file>
+	<file alias="signal_wifi_1_bar.svg">device_signal_wifi_1_bar.svg</file>
 	<file alias="signal_wifi_2_bar.svg">device_signal_wifi_2_bar.svg</file>
 	<file alias="signal_wifi_3_bar.svg">device_signal_wifi_3_bar.svg</file>
 </qresource>
@@ -23,6 +26,7 @@
 	<file alias="volume_down.svg">av_volume_down.svg</file>
 	<file alias="volume_up.svg">av_volume_up.svg</file>
 	<file alias="volume_off.svg">av_volume_off.svg</file>
+	<file alias="volume_mute.svg">av_volume_mute.svg</file>
 </qresource>
 
 <qresource prefix="/icons/action">

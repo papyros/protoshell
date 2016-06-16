@@ -33,7 +33,10 @@ BaseCompositor {
         }
     }
 
-    Component.onCompleted: Theme.iconsRoot = Qt.resolvedUrl('icons')
+    Component.onCompleted: {
+        Theme.primaryColor = Palette.colors['blue']['500']
+        Theme.iconsRoot = Qt.resolvedUrl('icons')
+    }
 
     KCoreAddons.KUser { id: currentUser }
     MprisConnection { id: musicPlayer }
