@@ -21,10 +21,38 @@ import Material 0.3
 import "../base"
 
 Tooltip {
-    id: dropdown
+    id: windowPreview
 
     property var windows: []
     property var app
+
+    width: windows.length == 0
+            ? tooltipLabel.paintedWidth + dp(32)
+            : layout.width + dp(32)
+    height: windows.length == 0
+            ? Device.isMobile ? dp(44) : dp(40)
+            : layout.height + dp(32)
+
+    function delayShow(caller, app, windows) {
+        if (windowPreview.showing || delayCloseTimer.running) {
+            windowPreview.windows = windows
+            windowPreview.app = app
+            windowPreview.open(caller, 0, dp(16))
+        } else {
+            previewTimer.windows = windows
+            previewTimer.app = app
+            previewTimer.caller = caller
+            previewTimer.estart()
+        }
+    }
+
+    function hide() {
+        if (windowPreview.showing)
+            windowPreview.close()
+
+        delayCloseTimer.restart()
+        previewTimer.stop()
+    }
 
     ColumnLayout {
         id: layout
@@ -70,10 +98,24 @@ Tooltip {
         }
     }
 
-    width: windows.length == 0
-            ? tooltipLabel.paintedWidth + dp(32)
-            : layout.width + dp(32)
-    height: windows.length == 0
-            ? Device.isMobile ? dp(44) : dp(40)
-            : layout.height + dp(32)
+    Timer {
+        id: previewTimer
+
+        property var windows
+        property var app
+        property var caller
+
+        interval: 1000
+
+        onTriggered: {
+            windowPreview.windows = windows
+            windowPreview.app = app
+            windowPreview.open(previewTimer.caller, 0, dp(16))
+        }
+    }
+
+    Timer {
+        id: delayCloseTimer
+        interval: 10
+    }
 }

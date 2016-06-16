@@ -91,13 +91,9 @@ PanelItem {
 
     onContainsMouseChanged: {
         if (containsMouse) {
-            previewTimer.delayShow(appLauncher, model, windows)
+            windowPreview.delayShow(appLauncher, model, windows)
         } else {
-            if (windowPreview.showing)
-                windowPreview.close()
-
-            delayCloseTimer.restart()
-            previewTimer.stop()
+            windowPreview.hide()
         }
     }
 

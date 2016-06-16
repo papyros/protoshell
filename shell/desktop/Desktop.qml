@@ -1,11 +1,11 @@
 import QtQuick 2.0
 import Material 0.3
-import "../base"
 import "../panel"
 
-BaseDesktop {
+MaterialDesktop {
     id: desktop
-    property alias surfacesArea: surfacesLayer
+
+    property alias surfacesArea: workspace.surfacesLayer
 
     property bool hasFullscreenWindow: {
         for (var i = 0; i < windows.length; i++) {
@@ -29,20 +29,11 @@ BaseDesktop {
         return dp * Units.dp
     }
 
-    Image {
-        id: backgroundLayer
+    Workspace { id: workspace }
 
-        anchors.fill: parent
-
-        fillMode: Image.PreserveAspectCrop
-        source: "/usr/share/wallpapers/Next/contents/images/1440x900.png"
-    }
-
-    Item {
-        id: surfacesLayer
-
-        anchors.fill: parent
-        anchors.bottomMargin: panel.height
+    OverlayLayer {
+        id: desktopOverlayLayer
+        objectName: "desktopOverlayLayer"
     }
 
     Panel { id: panel }

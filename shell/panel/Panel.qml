@@ -136,40 +136,6 @@ View {
         }
     }
 
-    Timer {
-        id: delayCloseTimer
-        interval: 10
-    }
-
-    Timer {
-        id: previewTimer
-
-        property var windows
-        property var app
-        property var caller
-
-        interval: 1000
-
-        function delayShow(caller, app, windows) {
-            if (windowPreview.showing || delayCloseTimer.running) {
-                windowPreview.windows = windows
-                windowPreview.app = app
-                windowPreview.open(caller, 0, dp(16))
-            } else {
-                previewTimer.windows = windows
-                previewTimer.app = app
-                previewTimer.caller = caller
-                restart()
-            }
-        }
-
-        onTriggered: {
-            windowPreview.windows = windows
-            windowPreview.app = app
-            windowPreview.open(previewTimer.caller, 0, dp(16))
-        }
-    }
-
     WindowTooltip {
         id: windowPreview
         overlayLayer: "desktopTooltipOverlayLayer"
