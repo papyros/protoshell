@@ -56,18 +56,7 @@ PanelItem {
         return modelData.window.appId == appId
     })
 
-    property bool active: focused && getMainWorkspace() == windowManager.currentWorkspace
-
-    function getMainWorkspace() {
-        var workspace
-
-        for (var i = 0; i < windows.length; i++) {
-            if (workspace != windowManager.currentWorkspace)
-                workspace = windows[i].item.workspace
-        }
-
-        return workspace
-    }
+    property bool active: focused
 
     onClicked: {
         if (!running) {

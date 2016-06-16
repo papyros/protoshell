@@ -54,6 +54,11 @@ PanelItem {
             dropdown.open(indicatorView, 0, dp(16))
     }
 
+    Connections {
+        target: indicator
+        onClose: desktop.overlayLayer.currentOverlay.close()
+    }
+
     Loader {
         id: iconView
         anchors.centerIn: parent
@@ -137,6 +142,10 @@ PanelItem {
             asynchronous: true
 
             anchors.fill: parent
+
+            function dp(dp) {
+                return desktop.dp(dp)
+            }
         }
     }
 }

@@ -36,7 +36,5 @@ Object {
 
     property Component view
 
-    function close() {
-        desktop.overlayLayer.currentOverlay.close()
-    }
+    signal close()
 }
