@@ -1,0 +1,32 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+
+<qresource>
+	<file>Compositor.qml</file>
+	<file>base/BaseCompositor.qml</file>
+	<file>base/BaseDesktop.qml</file>
+	<file>base/BaseOutput.qml</file>
+	<file>base/IdleDimmer.qml</file>
+	<file>base/Keyboard.qml</file>
+	<file>base/OutputConfiguration.qml</file>
+	<file>base/OutputWindow.qml</file>
+	<file>base/WindowPreview.qml</file>
+	<file>desktop/Desktop.qml</file>
+	<file>desktop/WindowTooltip.qml</file>
+	<file>desktop/Workspace.qml</file>
+	<file>launcher/AppDrawer.qml</file>
+	<file>launcher/AppsIcon.qml</file>
+	<file>launcher/Dot.qml</file>
+	<file>main.qml</file>
+	<file>notifications/NotificationCard.qml</file>
+	<file>notifications/NotificationsView.qml</file>
+	<file>notifications/SystemNotification.qml</file>
+	<file>notifications/SystemNotifications.qml</file>
+	<file>panel/AppLauncher.qml</file>
+	<file>panel/AppsRow.qml</file>
+	<file>panel/Panel.qml</file>
+	<file>system/DateTime.qml</file>
+	<file>system/Sound.qml</file>
+</qresource>
+
+</RCC>

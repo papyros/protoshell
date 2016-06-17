@@ -16,6 +16,8 @@
 #include "launcher/application.h"
 #include "launcher/launchermodel.h"
 
+#include "session/sessionmanager.h"
+
 void DesktopPlugin::registerTypes(const char *uri)
 {
     // @uri Papyros.Desktop
@@ -43,4 +45,9 @@ void DesktopPlugin::registerTypes(const char *uri)
                                         QStringLiteral("Cannot create Battery object"));
     qmlRegisterUncreatableType<StorageDevice>(uri, 0, 1, "StorageDevice",
                                               QStringLiteral("Cannot create StorageDevice object"));
+
+    // Session management
+
+    qmlRegisterSingletonType<SessionManager>(uri, 0, 1, "SessionManager",
+                                             SessionManager::qmlSingleton);
 }

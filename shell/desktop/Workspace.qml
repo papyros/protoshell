@@ -11,7 +11,7 @@ Item {
         anchors.fill: parent
 
         fillMode: Image.PreserveAspectCrop
-        source: "/usr/share/wallpapers/Next/contents/images/1440x900.png"
+        source: "file:///usr/share/wallpapers/Next/contents/images/1440x900.png"
     }
 
     Item {

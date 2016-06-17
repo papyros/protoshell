@@ -8,6 +8,8 @@ set(PROJECT_VERSION_MAJOR 0)
 set(PROJECT_SOVERSION 0)
 
 # Options
+# Options
+option(DEVELOPMENT_BUILD "Enable options for developers" OFF)
 option(ENABLE_ALSA "Enables Alsa mixer backend" ON)
 option(ENABLE_PULSEAUDIO "Enables PulseAudio mixer backend" ON)
 
@@ -33,6 +35,7 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FR
 set(QT_MIN_VERSION "5.6.0")
 set(KF5_MIN_VERSION "5.8.0")
 
+find_package(PAM REQUIRED)
 find_package(GreenIsland 0.7.90 REQUIRED COMPONENTS Server)
 
 # Find Qt5
@@ -52,10 +55,19 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 find_package(QT5XDG REQUIRED)
 find_package(Papyros REQUIRED)
 
+# Check for prctl
+check_include_file("sys/prctl.h" HAVE_SYS_PRCTL_H)
+check_symbol_exists(PR_SET_DUMPABLE "sys/prctl.h" HAVE_PR_SET_DUMPABLE)
+add_feature_info("prctl-dumpable" HAVE_PR_SET_DUMPABLE "Required to prevent ptrace on the compositor process")
+
+add_subdirectory(3rdparty)
+add_subdirectory(compositor)
 add_subdirectory(headers)
 add_subdirectory(modules)
 
-greenisland_install_shell(io.papyros.shell shell)
+if(DEVELOPMENT_BUILD)
+    greenisland_install_shell(io.papyros.shell shell)
+endif()
 
 # Display featute summary
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
