@@ -70,6 +70,7 @@ set(Qt5WaylandClient_PRIVATE_INCLUDE_DIRS
 
 add_subdirectory(3rdparty)
 add_subdirectory(compositor)
+add_subdirectory(data)
 add_subdirectory(decorations)
 add_subdirectory(headers)
 add_subdirectory(modules)
