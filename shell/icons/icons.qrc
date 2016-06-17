@@ -7,6 +7,10 @@
 	<file alias="message.svg">communication_message.svg</file>
 </qresource>
 
+<qresource prefix="/icons/alert">
+	<file alias="warning.svg">alert_warning.svg</file>
+</qresource>
+
 <qresource prefix="/icons/device">
 	<file alias="network_wifi.svg">device_network_wifi.svg</file>
 	<file alias="battery_charging_full.svg">device_battery_charging_full.svg</file>

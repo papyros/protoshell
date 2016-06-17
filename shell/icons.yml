@@ -3,6 +3,7 @@ icons:
     - action/alarm
     - action/lock
     - action/power_settings_new
+    - alert/warning
     - av/volume_down
     - av/volume_up
     - av/volume_off
