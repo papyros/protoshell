@@ -2,12 +2,13 @@ project(io.papyros.Shell)
 
 cmake_minimum_required(VERSION 3.0.0)
 
+set(CMAKE_AUTORCC ON)
+
 # Set version
 set(PROJECT_VERSION "0.1.0")
 set(PROJECT_VERSION_MAJOR 0)
 set(PROJECT_SOVERSION 0)
 
-# Options
 # Options
 option(DEVELOPMENT_BUILD "Enable options for developers" OFF)
 option(ENABLE_ALSA "Enables Alsa mixer backend" ON)
@@ -46,7 +47,8 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
              Gui
              Widgets
              Qml
-             Quick)
+             Quick
+             WaylandClient)
 
 # Find KF5
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
@@ -60,8 +62,15 @@ check_include_file("sys/prctl.h" HAVE_SYS_PRCTL_H)
 check_symbol_exists(PR_SET_DUMPABLE "sys/prctl.h" HAVE_PR_SET_DUMPABLE)
 add_feature_info("prctl-dumpable" HAVE_PR_SET_DUMPABLE "Required to prevent ptrace on the compositor process")
 
+# Hack because QtWayland doesn't set this at all
+set(Qt5WaylandClient_PRIVATE_INCLUDE_DIRS
+        "${_qt5WaylandClient_install_prefix}/include/qt/QtWaylandClient/${Qt5WaylandClient_VERSION}"
+        "${_qt5WaylandClient_install_prefix}/include/qt/QtWaylandClient/${Qt5WaylandClient_VERSION}/QtWaylandClient"
+    )
+
 add_subdirectory(3rdparty)
 add_subdirectory(compositor)
+add_subdirectory(decorations)
 add_subdirectory(headers)
 add_subdirectory(modules)
 
