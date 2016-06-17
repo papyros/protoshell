@@ -86,16 +86,15 @@ int main(int argc, char *argv[])
     // Setup the environment
     setupEnvironment();
 
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
     // Application
     QApplication app(argc, argv);
     app.setApplicationName(QLatin1String("Papyros Shell"));
     app.setApplicationVersion(QLatin1String(PAPYROS_SHELL_VERSION_STRING));
     app.setOrganizationName(QLatin1String("Ppayros"));
     app.setOrganizationDomain(QLatin1String("papyros.io"));
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
-    app.setAttribute(Qt::AA_EnableHighDpiScaling);
     app.setFallbackSessionManagementEnabled(false);
-#endif
     app.setQuitOnLastWindowClosed(false);
 
     // Command line parser
