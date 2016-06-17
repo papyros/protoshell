@@ -18,6 +18,7 @@
 import QtQuick 2.2
 import QtQuick.Window 2.0
 import Material 0.2
+import Papyros.Desktop 0.1
 
 Item {
     property string iconName
@@ -27,9 +28,24 @@ Item {
     Image {
         id: icon
         anchors.fill: parent
-        source: iconName.indexOf('/') == 0 ? iconName
-                                           : hasIcon ? "image://desktoptheme/" + iconName : ""
+        source: iconSource()
         visible: status == Image.Ready
+        cache: false
+
+        function iconSource() {
+            return iconName.indexOf('/') == 0 ? iconName
+                                               : hasIcon ? "image://desktoptheme/" + iconName : ""
+        }
+
+        Connections {
+            target: DesktopFiles
+            onIconThemeChanged: {
+                icon.source = ''
+                icon.source = Qt.binding(function() {
+                    return icon.iconSource()
+                })
+            }
+        }
 
         sourceSize {
             width: Math.max(16, icon.width * Screen.devicePixelRatio)
