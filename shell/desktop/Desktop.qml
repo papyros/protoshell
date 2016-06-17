@@ -28,6 +28,14 @@ BaseDesktop {
         'bottom': panel.height
     }
 
+    state: 'splash'
+
+    onStateChanged: {
+        if (state != 'splash') {
+            splash.hide()
+        }
+    }
+
     function dp(dp) {
         return dp * Units.dp
     }
@@ -70,4 +78,12 @@ BaseDesktop {
     }
 
     Panel { id: panel }
+
+    Splash { id: splash }
+
+    Timer {
+        interval: 2000
+        running: true
+        onTriggered: desktop.state = "session"
+    }
 }

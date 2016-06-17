@@ -12,6 +12,7 @@
 	<file>base/OutputWindow.qml</file>
 	<file>base/WindowPreview.qml</file>
 	<file>desktop/Desktop.qml</file>
+	<file>desktop/Splash.qml</file>
 	<file>desktop/WindowTooltip.qml</file>
 	<file>desktop/Workspace.qml</file>
 	<file>error/ErrorCompositor.qml</file>

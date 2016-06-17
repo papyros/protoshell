@@ -28,6 +28,8 @@ import "../desktop"
 View {
     id: panel
 
+    property bool showing: desktop.state == "session"
+
     property color darkColor: "#263238"
     property bool maximized: desktop.hasMaximizedWindow ||
             !ShellSettings.appShelf.transparentShelf
@@ -40,6 +42,14 @@ View {
         left: parent.left
         right: parent.right
         bottom: parent.bottom
+        bottomMargin: showing ? 0 : -height
+
+        Behavior on bottomMargin {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.InOutCubic 
+            }
+        }
     }
 
     // FIXME
