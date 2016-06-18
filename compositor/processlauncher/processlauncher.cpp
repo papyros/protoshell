@@ -155,6 +155,7 @@ bool ProcessLauncher::launchEntry(XdgDesktopFile *entry, const QStringList &urls
     env.insert(QStringLiteral("QT_PLATFORM_PLUGIN"), QStringLiteral("Papyros"));
     env.insert(QStringLiteral("QT_QPA_PLATFORM"), QStringLiteral("wayland"));
     env.insert(QStringLiteral("QT_QPA_PLATFORMTHEME"), QStringLiteral("Papyros"));
+    env.insert(QStringLiteral("QT_WAYLAND_DECORATION"), QStringLiteral("material"));
     env.insert(QStringLiteral("QT_QUICK_CONTROLS_STYLE"), QStringLiteral("Material"));
     env.insert(QStringLiteral("XCURSOR_THEME"), QStringLiteral("hawaii"));
     env.insert(QStringLiteral("XCURSOR_SIZE"), QStringLiteral("16"));
