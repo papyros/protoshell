@@ -89,7 +89,7 @@ bool ProcessLauncher::registerWithDBus(ProcessLauncher *instance)
     return true;
 }
 
-bool ProcessLauncher::launchApplication(const QString &appId)
+bool ProcessLauncher::launchApplication(const QString &appId, const QStringList &urls)
 {
     if (appId.isEmpty()) {
         qCWarning(LAUNCHER) << "Empty appId passed to ProcessLauncher::launchApplication()";
@@ -109,10 +109,10 @@ bool ProcessLauncher::launchApplication(const QString &appId)
         return false;
     }
 
-    return launchEntry(entry);
+    return launchEntry(entry, urls);
 }
 
-bool ProcessLauncher::launchDesktopFile(const QString &fileName)
+bool ProcessLauncher::launchDesktopFile(const QString &fileName, const QStringList &urls)
 {
     if (fileName.isEmpty()) {
         qCWarning(LAUNCHER) << "Empty file name passed to ProcessLauncher::launchDesktopFile()";
@@ -125,7 +125,7 @@ bool ProcessLauncher::launchDesktopFile(const QString &fileName)
         return false;
     }
 
-    return launchEntry(entry);
+    return launchEntry(entry, urls);
 }
 
 bool ProcessLauncher::closeApplication(const QString &appId)
@@ -140,9 +140,9 @@ bool ProcessLauncher::closeDesktopFile(const QString &fileName)
     return closeEntry(fileName);
 }
 
-bool ProcessLauncher::launchEntry(XdgDesktopFile *entry)
+bool ProcessLauncher::launchEntry(XdgDesktopFile *entry, const QStringList &urls)
 {
-    QStringList args = entry->expandExecString();
+    QStringList args = entry->expandExecString(urls);
     QString command = args.takeAt(0);
 
     qCDebug(LAUNCHER) << "Launching" << entry->expandExecString().join(" ") << "from"

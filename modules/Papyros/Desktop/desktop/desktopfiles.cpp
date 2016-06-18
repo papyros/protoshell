@@ -25,8 +25,8 @@
 Q_GLOBAL_STATIC(DesktopFiles, s_desktopFiles)
 
 DesktopFiles::DesktopFiles(QObject *parent)
-        : QObject(parent), m_interface("io.papyros.session", "/PapyrosSession",
-                                       "io.papyros.launcher", QDBusConnection::sessionBus())
+        : QObject(parent), m_interface("io.papyros.Session", "/ProcessLauncher",
+                                       "io.papyros.ProcessLauncher", QDBusConnection::sessionBus())
 {
     QStringList iconSearchPaths;
     iconSearchPaths << "/usr/share/icons"
