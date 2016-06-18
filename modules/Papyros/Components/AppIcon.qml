@@ -24,6 +24,7 @@ Item {
     property string iconName
     property string name
     property bool hasIcon
+    property alias asynchronous: icon.asynchronous
 
     Image {
         id: icon

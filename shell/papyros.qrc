@@ -17,6 +17,7 @@
 	<file>desktop/Workspace.qml</file>
 	<file>error/ErrorCompositor.qml</file>
 	<file>launcher/AppDrawer.qml</file>
+	<file>launcher/AppDrawerDelegate.qml</file>
 	<file>launcher/AppsIcon.qml</file>
 	<file>launcher/Dot.qml</file>
 	<file>main.qml</file>
